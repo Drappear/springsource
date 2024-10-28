@@ -1,6 +1,8 @@
 package com.example.project1.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +14,7 @@ import com.example.project1.dto.LoginDto;
 import com.example.project1.dto.MemberDto;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class MemberController {
 
     @GetMapping("/login")
-    public void getLogin() {
+    public void getLogin(LoginDto loginDto) {
         log.info("login 페이지 요청");
     }
 
@@ -45,22 +48,31 @@ public class MemberController {
     // }
 
     @PostMapping("/login")
-    public String postLogin(@ModelAttribute("login") LoginDto loginDto) {
+    public String postLogin(@Valid LoginDto loginDto, BindingResult result) {
         log.info("login 요청 - 사용자 입력값 요청");
 
         log.info("user id : " + loginDto.getUserId());
         log.info("password : " + loginDto.getPassword());
 
-        return "index";
+        if (result.hasErrors()) {
+            return "/member/login";
+        }
+
+        return "/member/login";
     }
 
     @GetMapping("/register")
-    public void getRegister() {
+    public void getRegister(MemberDto memberDto) {
         log.info("register 요청");
     }
 
     @PostMapping("/register")
-    public String postRegister(MemberDto memberDto) {
+    public String postRegister(@Valid MemberDto memberDto, BindingResult result) {
+        log.info("회원가입 요청");
+
+        if (result.hasErrors()) {
+            return "/member/register";
+        }
 
         return "redirect:/member/login"; // redirect : 경로
     }

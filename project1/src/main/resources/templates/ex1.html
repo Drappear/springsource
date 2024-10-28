@@ -13,5 +13,11 @@
 
       <li>addFlashAttribute : <span th:text="${addr}"></span></li>
     </ul>
+
+    <script>
+      const age = [[${param.age}]];
+      const name = '[[${param.name}]]';
+      const addr = '[[${addr}]]';
+    </script>
   </body>
 </html>

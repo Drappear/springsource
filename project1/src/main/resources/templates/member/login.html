@@ -7,22 +7,42 @@
   </head>
   <body>
     <h1>Login</h1>
-    <form action="" method="post">
+    <form action="" method="post" th:object="${loginDto}">
       <div>
         <label for="userId">ID</label>
-        <input type="text" name="userId" id="userId" />
+        <input
+          type="text"
+          name="userId"
+          id="userId"
+          th:value="${loginDto.userId}"
+        />
+        <div
+          class="text-danger"
+          th:if="${#fields.hasErrors('userId')}"
+          th:errors="*{userId}"
+        ></div>
       </div>
       <div>
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          th:value="${loginDto.password}"
+        />
+        <div
+          class="text-danger"
+          th:if="${#fields.hasErrors('password')}"
+          th:errors="*{password}"
+        ></div>
       </div>
       <div>
         <button>Login</button>
       </div>
     </form>
     <ul>
-      <li>ID : <span th:text="${login?.userId}"></span></li>
-      <li>Password : <span th:text="${login?.password}"></span></li>
+      <li>ID : <span th:text="${loginDto.userId}"></span></li>
+      <li>Password : <span th:text="${loginDto?.password}"></span></li>
     </ul>
   </body>
 </html>
