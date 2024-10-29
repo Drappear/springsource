@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 // id, userName, age
 // 회원가입일, 수정일
 // 회원 - 관리자, 회원으로 구분됨
+// 회원 이름은 필수, 10자 이내
 
 @Builder
 @NoArgsConstructor
@@ -29,7 +30,7 @@ public class Member {
     @Id
     private String id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 30)
     private String userName;
 
     private int age;
