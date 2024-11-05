@@ -7,11 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.mart.entity.constant.DeliveryStatus;
 import com.example.mart.entity.constant.OrderStatus;
+import com.example.mart.entity.item.Delivery;
 import com.example.mart.entity.item.Item;
 import com.example.mart.entity.item.Member;
 import com.example.mart.entity.item.Order;
 import com.example.mart.entity.item.OrderItem;
+import com.example.mart.repository.item.DeliveryRepository;
 import com.example.mart.repository.item.ItemRepository;
 import com.example.mart.repository.item.MemberRepository;
 import com.example.mart.repository.item.OrderItemRepository;
@@ -33,6 +36,9 @@ public class MartRepositoryTest {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     // C
     @Test
@@ -181,5 +187,40 @@ public class MartRepositoryTest {
         System.out.println(member);
 
         member.getOrderList().forEach(order -> System.out.println(order));
+    }
+
+    @Test
+    public void testDeliveryInsert() {
+        // 배송 정보 입력
+        Delivery delivery = Delivery.builder()
+                .postal("배송지우편번호")
+                .addr("배송지 주소")
+                .addrDetail("배송지 상세주소")
+                .deliveryStatus(DeliveryStatus.READY)
+                .build();
+
+        deliveryRepository.save(delivery);
+
+        // order와 배송정보 연결
+        Order order = orderRepository.findById(2L).get();
+        order.setDelivery(delivery);
+        orderRepository.save(order);
+    }
+
+    @Test
+    public void testOrderRead() {
+        // order 조회(+ 배송정보)
+        Order order = orderRepository.findById(2L).get();
+        System.out.println(order);
+        System.out.println(order.getDelivery());
+    }
+
+    // 양방향(배송 => 주문)
+    @Test
+    public void testDeliveryRead() {
+        // 배송정보 조회(+ order)
+        Delivery delivery = deliveryRepository.findById(1L).get();
+        System.out.println(delivery);
+        System.out.println(delivery.getOrder());
     }
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,13 +30,13 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = { "member", "orderItemsList" })
+@ToString(exclude = { "member", "orderItemsList", "delivery" })
 @Setter
 @Getter
 @SequenceGenerator(name = "mart_order_seq_gen", sequenceName = "mart_order_seq", allocationSize = 1)
 @Table(name = "mart_order")
 @Entity
-public class Order {
+public class Order extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mart_order_seq_gen")
     @Column(name = "order_id")
@@ -51,6 +52,9 @@ public class Order {
 
     @ManyToOne
     private Member member;
+
+    @OneToOne
+    private Delivery delivery;
 
     // OrderItem ==> Order 접근하는 관계는 OrderItem쪽에 설정
     // 외래키 있는 쪽에 관계 설정해야 함
