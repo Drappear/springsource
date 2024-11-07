@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css">
+    <style>
+      /* css */
+    </style>
+  </th:block>
+
+  <div layout:fragment="content" class="container">
+    <h1>도서 목록</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">분류</th>
+          <th scope="col">제목</th>
+          <th scope="col">저자</th>
+          <th scope="col">출판사</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="book : ${bookList}">
+          <th scope="row" th:text="${book.id}"></th>
+          <td th:text="${book.categoryName}"></td>
+          <td>
+            <a
+              th:href="@{read(id=${book.id})}"
+              th:text="${book.title}"
+              class="text-decoration-none text-reset"
+            ></a>
+          </td>
+          <td th:text="${book.writer}"></td>
+          <td th:text="${book.publisherName}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <th:block layout:fragment="script">
+    <script>
+      // script
+      const msg = "[[${msg}]]";
+      if (msg) {
+        alert(msg);
+      }
+    </script>
+  </th:block>
+</html>
