@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @DynamicInsert // default 값 동작
 @DynamicUpdate
 @Entity(name = "todotbl")
-public class Todo {
+public class Todo extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_seq_gen")
     @Column(name = "todo_id")

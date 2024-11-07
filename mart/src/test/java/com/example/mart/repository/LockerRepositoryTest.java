@@ -6,7 +6,6 @@ import java.util.stream.LongStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.example.mart.entity.sports.Locker;
 import com.example.mart.entity.sports.SportsMember;
@@ -15,7 +14,6 @@ import com.example.mart.repository.sports.SportsMemberRepository;
 
 import jakarta.transaction.Transactional;
 
-@EnableJpaAuditing
 @SpringBootTest
 public class LockerRepositoryTest {
 
