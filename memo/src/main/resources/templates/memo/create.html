@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css">
+    <style></style>
+  </th:block>
+  <div layout:fragment="content" class="bg-body-tertiary p-5 rounded">
+    <div class="card">
+      <div class="card-header">메모 추가</div>
+      <div class="card-body">
+        <form action="" method="post" th:object="${memoDTO}">
+          <div class="form-floating">
+            <textarea
+              class="form-control"
+              placeholder="Leave a comment here"
+              id="floatingTextarea"
+              style="height: 100px"
+              name="memoText"
+            ></textarea>
+            <label for="floatingTextarea">MemoText</label>
+            <div
+              th:if="${#fields.hasErrors('memoText')}"
+              th:errors="*{memoText}"
+              class="text-danger"
+            ></div>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary">작성</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <th:block layout:fragment="script">
+    <script></script>
+  </th:block>
+</html>
