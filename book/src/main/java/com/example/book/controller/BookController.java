@@ -14,7 +14,10 @@ import lombok.extern.log4j.Log4j2;
 
 import com.example.book.dto.BookDTO;
 import com.example.book.dto.CategoryDTO;
+import com.example.book.dto.PageRequestDTO;
+import com.example.book.dto.PageResultDTO;
 import com.example.book.dto.PublisherDTO;
+import com.example.book.entity.Book;
 import com.example.book.service.BookService;
 
 import jakarta.validation.Valid;
@@ -33,12 +36,12 @@ public class BookController {
 
     // 목록
     @GetMapping("/list")
-    public void getList(Model model) {
+    public void getList(PageRequestDTO pageRequestDTO, Model model) {
         log.info("list page request");
 
-        List<BookDTO> bookList = bookService.getList();
+        PageResultDTO<BookDTO, Book> result = bookService.getList(pageRequestDTO);
 
-        model.addAttribute("bookList", bookList);
+        model.addAttribute("result", result);
     }
 
     // 상세조회

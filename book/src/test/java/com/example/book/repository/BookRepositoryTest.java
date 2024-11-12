@@ -5,6 +5,11 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.ScrollPosition.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.book.entity.Book;
@@ -54,7 +59,7 @@ public class BookRepositoryTest {
 
     @Test
     public void testBookInsert() {
-        IntStream.rangeClosed(11, 15).forEach(i -> {
+        IntStream.rangeClosed(16, 110).forEach(i -> {
 
             long num = (int) (Math.random() * 5) + 1;
 
@@ -84,5 +89,30 @@ public class BookRepositoryTest {
         System.out.println(book);
         System.out.println(book.getCategory().getName());
         System.out.println(book.getPublisher().getName());
+    }
+
+    // 페이지 나누기
+    @Transactional
+    @Test
+    public void testPage() {
+        // Pageable : spring boot에서 제공하는 페이지 처리 객체
+
+        // 한페이지에 20개의 최신 도서정보
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate(null, null), pageable);
+
+        System.out.println("total elements : " + result.getTotalElements());
+        System.out.println("total pages : " + result.getTotalPages());
+        result.getContent().forEach(book -> System.out.println(book));
+    }
+
+    @Test
+    public void testPageSearch() {
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate("c", "건강"), pageable);
+
+        System.out.println("total elements : " + result.getTotalElements());
+        System.out.println("total pages : " + result.getTotalPages());
+        result.getContent().forEach(book -> System.out.println(book));
     }
 }

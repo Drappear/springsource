@@ -19,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="book : ${bookList}">
+        <tr th:each="book : ${result.dtoList}">
           <th scope="row" th:text="${book.id}"></th>
           <td th:text="${book.categoryName}"></td>
           <td>
@@ -34,6 +34,35 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${result.prev}">
+          <a
+            class="page-link"
+            th:href="@{list(page=${result.start-1},size=${result.size})}"
+            >Previous</a
+          >
+        </li>
+        <li
+          th:class="'page-item ' + ${result.page == page ? 'active' : ''}"
+          aria-current="page"
+          th:each="page : ${result.pageList}"
+        >
+          <a
+            class="page-link"
+            th:href="@{list(page=${page},size=${result.size})}"
+            th:text="${page}"
+          ></a>
+        </li>
+        <li class="page-item" th:if="${result.next}">
+          <a
+            class="page-link"
+            th:href="@{list(page=${result.end+1},size=${result.size})}"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
   </div>
 
   <th:block layout:fragment="script">

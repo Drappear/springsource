@@ -19,7 +19,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = { "category", "publisher" })
 @Setter
 @Getter
 @Table(name = "booktbl")
