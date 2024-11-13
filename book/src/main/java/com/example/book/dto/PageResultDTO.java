@@ -35,9 +35,11 @@ public class PageResultDTO<DTO, EN> {
     private List<Integer> pageList;
 
     public PageResultDTO(Page<EN> result, Function<EN, DTO> fn) {
+
         // List<Book> books = result.getContent();
-        // List<BookDTO> list = books.stream().map(b ->
+        // List<BookDto> list = books.stream().map(b ->
         // entityToDto(b)).collect(Collectors.toList());
+
         dtoList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
         makePageList(result.getPageable());
@@ -45,7 +47,7 @@ public class PageResultDTO<DTO, EN> {
 
     private void makePageList(Pageable pageable) {
         // 사용자가 요청한 페이지 번호
-        // 0 이 1페이지
+        // 0 이 1 page
         this.page = pageable.getPageNumber() + 1;
         this.size = pageable.getPageSize();
 
@@ -56,6 +58,11 @@ public class PageResultDTO<DTO, EN> {
         this.end = totalPage > tempEnd ? tempEnd : totalPage;
         this.next = totalPage > tempEnd;
 
-        pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
+        // IntStream.rangeClosed(start, end) : int
+
+        pageList = IntStream.rangeClosed(start, end)
+                .boxed() // int ==> Integer
+                .collect(Collectors.toList());
     }
+
 }

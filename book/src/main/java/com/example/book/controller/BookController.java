@@ -36,8 +36,9 @@ public class BookController {
 
     // 목록
     @GetMapping("/list")
-    public void getList(PageRequestDTO pageRequestDTO, Model model) {
+    public void getList(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, Model model) {
         log.info("list page request");
+        log.info("requestDto {} ", pageRequestDTO);
 
         PageResultDTO<BookDTO, Book> result = bookService.getList(pageRequestDTO);
 
@@ -47,8 +48,10 @@ public class BookController {
     // 상세조회
     @GetMapping(value = { "/read", "/modify" })
 
-    public void getRead(@RequestParam Long id, Model model) {
+    public void getRead(@RequestParam Long id,
+            @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, Model model) {
         log.info("read {} book request", id);
+        log.info("requestDto {} ", pageRequestDTO);
 
         BookDTO dto = bookService.getRow(id);
 
@@ -58,22 +61,36 @@ public class BookController {
 
     // 수정
     @PostMapping("/modify")
-    public String postModify(BookDTO dto, RedirectAttributes rttr) {
+    public String postModify(BookDTO dto, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            RedirectAttributes rttr) {
         log.info("post modify {} book request", dto);
+        log.info("requestDto {} ", pageRequestDTO);
 
         Long id = bookService.update(dto);
 
         // 상세조회로 이동
         rttr.addAttribute("id", id);
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+
         return "redirect:read";
     }
 
     // 삭제
     @PostMapping("/remove")
-    public String postRemove(@RequestParam Long id) {
+    public String postRemove(@RequestParam Long id, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            RedirectAttributes rttr) {
         log.info("post remove {} book request", id);
+        log.info("requestDto {} ", pageRequestDTO);
 
         bookService.delete(id);
+
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
 
         return "redirect:list";
     }

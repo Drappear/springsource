@@ -8,3 +8,17 @@ document.querySelector(".btn-danger").addEventListener("click", () => {
     af.submit();
   }
 });
+
+// 목록 클릭시
+document.querySelector(".btn-secondary").addEventListener("click", (e) => {
+  // 기능 중지
+  e.preventDefault();
+  // id값 제거
+  af.querySelector("[name='id']").remove();
+  // actionForm method get으로 변경
+  af.method = "get";
+  // actionForm action list로 변경
+  af.action = "list";
+  // submit
+  af.submit();
+});

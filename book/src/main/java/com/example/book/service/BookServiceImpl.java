@@ -52,7 +52,8 @@ public class BookServiceImpl implements BookService {
 
         // 페이지 나누기 o
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("id").descending());
-        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate(null, null), pageable);
+        Page<Book> result = bookRepository
+                .findAll(bookRepository.makePredicate(pageRequestDTO.getType(), pageRequestDTO.getKeyword()), pageable);
 
         Function<Book, BookDTO> fn = (entity -> entityToDto(entity));
         return new PageResultDTO<>(result, fn);
