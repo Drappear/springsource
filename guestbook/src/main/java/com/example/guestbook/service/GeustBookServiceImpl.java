@@ -26,19 +26,18 @@ public class GeustBookServiceImpl implements GuestBookService {
 
     @Override
     public Long register(GuestBookDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+        return guestBookRepository.save(dtoToEntity(dto)).getGno();
     }
 
     @Override
     public GuestBookDTO read(Long gno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        GuestBook guestBook = guestBookRepository.findById(gno).get();
+        return entityToDto(guestBook);
     }
 
     @Override
     public PageResultDTO<GuestBookDTO, GuestBook> list(PageRequestDTO requestDto) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
+        Pageable pageable = requestDto.getPageable(Sort.by("gno").descending());
 
         Page<GuestBook> result = guestBookRepository
                 .findAll(guestBookRepository
@@ -50,8 +49,15 @@ public class GeustBookServiceImpl implements GuestBookService {
 
     @Override
     public Long update(GuestBookDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        GuestBook guestBook = guestBookRepository.findById(dto.getGno()).get();
+        guestBook.setTitle(dto.getTitle());
+        guestBook.setContent(dto.getContent());
+        return guestBookRepository.save(guestBook).getGno();
+    }
+
+    @Override
+    public void delete(Long gno) {
+        guestBookRepository.deleteById(gno);
     }
 
 }
