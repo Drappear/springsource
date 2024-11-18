@@ -3,6 +3,7 @@ package com.example.board.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,6 +44,6 @@ public class Board extends BaseEntity {
     private Member writer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board") // 기본 fetch 전략이 lazy
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE) // 기본 fetch 전략이 lazy
     private List<Reply> replies = new ArrayList<>();
 }

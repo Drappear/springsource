@@ -12,7 +12,9 @@ import com.example.board.dto.PageResultDTO;
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.repository.BoardRepository;
+import com.example.board.repository.ReplyRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,11 +24,11 @@ import lombok.extern.log4j.Log4j2;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
 
     @Override
     public Long register(BoardDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+        return boardRepository.save(dtoToEntity(dto)).getBno();
     }
 
     @Override
@@ -55,10 +57,13 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.save(board).getBno();
     }
 
+    @Transactional
     @Override
     public void remove(Long bno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        // 댓글 삭제
+        replyRepository.deleteByBno(bno);
+        // 원본글 삭제
+        boardRepository.deleteById(bno);
     }
 
 }

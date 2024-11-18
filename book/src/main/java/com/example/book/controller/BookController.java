@@ -109,7 +109,7 @@ public class BookController {
 
     @PostMapping("/create")
     public String postCreate(@Valid @ModelAttribute("dto") BookDTO dto, BindingResult result, Model model,
-            RedirectAttributes rttr) {
+            RedirectAttributes rttr, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
         log.info("post book create request");
 
         List<CategoryDTO> categories = bookService.getCategoryList();
