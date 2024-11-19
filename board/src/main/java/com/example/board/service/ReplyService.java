@@ -11,7 +11,7 @@ public interface ReplyService {
 
     List<ReplyDTO> list(Long bno);
 
-    List<ReplyDTO> read(Long rno);
+    ReplyDTO read(Long rno);
 
     Long modify(ReplyDTO replyDto);
 
@@ -21,6 +21,7 @@ public interface ReplyService {
     public default ReplyDTO entityToDto(Reply entity) {
         return ReplyDTO.builder()
                 .rno(entity.getRno())
+                .bno(entity.getBoard().getBno())
                 .text(entity.getText())
                 .replyer(entity.getReplyer())
                 .regDate(entity.getRegDate())

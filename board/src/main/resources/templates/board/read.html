@@ -4,14 +4,7 @@
     <h2>Board Read Page</h2>
     <div class="mb-3">
       <label for="bno">Bno</label>
-      <input
-        type="text"
-        name="bno"
-        id="bno"
-        class="form-control"
-        th:value="${dto.bno}"
-        readonly
-      />
+      <input type="text" name="bno" id="bno" class="form-control" th:value="${dto.bno}" readonly />
     </div>
     <div class="mb-3">
       <label for="title">Title</label>
@@ -67,9 +60,27 @@
       class="btn btn-info"
       >List</a
     >
+    <!-- 댓글 폼 영역 -->
+    <div class="mt-5">
+      <hr />
+      <div class="border p-4">
+        <form action="" method="post" id="replyForm">
+          <input type="hidden" name="rno" id="rno" value="" />
+          <div class="input-group mb-3">
+            <span class="input-group-text">작성자</span>
+            <input type="text" name="replyer" id="replyer" class="form-control" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">댓글</span>
+            <textarea name="text" id="text" rows="3" class="form-control"></textarea>
+            <button class="btn btn-outline-secondary" type="submit">등록</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <!-- 댓글 영역 -->
     <div class="row mt-4">
-      <h5 class="my-4 border-bottom">
+      <h5 class="p-3 border-bottom">
         <i class="fa-regular fa-comment"></i>
         <span class="d-inline-block mx-2"></span> 개의 댓글
       </h5>
