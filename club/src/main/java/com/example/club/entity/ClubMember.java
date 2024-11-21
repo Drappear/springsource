@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Setter
 @Getter
@@ -47,4 +47,5 @@ public class ClubMember extends BaseEntity {
     }
 
     // @ElementCollection : 개념상 1:N 관계, 엔티티의 기본 키를 PK겸 FK로 사용
+    // 부모 삭제 시 자식도 삭제
 }

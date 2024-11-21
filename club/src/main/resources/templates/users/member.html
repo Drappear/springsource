@@ -21,16 +21,22 @@
 
       <h4>
         이메일
-
         <div>
-          <span sec:authentication="principal.authorities"></span>
+          <span sec:authentication="principal.username"></span>
         </div>
         <div>
-          <span sec:authentication="principal.authorities"></span>
+          <span sec:authentication="principal.email"></span>
+        </div>
+        <div>
+          <span sec:authentication="name"></span>
         </div>
       </h4>
 
-      <!-- 로그인이 되었다면 -->
+      <h4>
+        social 여부
+        <span sec:authentication="principal.fromSocial"></span>
+      </h4>
+
       <div sec:authorize="isAuthenticated()">
         <a class="btn btn-success" th:href="@{/users/logout}">로그아웃</a>
       </div>

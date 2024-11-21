@@ -28,7 +28,7 @@ public class ClubMemberRepositoryTest {
                     .email("user" + i + "@email.com")
                     .name("user" + i)
                     .fromSocial(false)
-                    .password("1111")
+                    .password(passwordEncoder.encode("1111"))
                     .build();
             clubMember.addMemberRole(ClubRole.USER);
 

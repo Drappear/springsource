@@ -8,7 +8,7 @@ import com.example.club.entity.ClubMember;
 import java.util.Optional;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, String> {
-    // WHERE club_member_email=? and club_member_from_social = ?
+    // WHERE cm1_0.email=?=? AND cm1_0.from_social = ?
     @EntityGraph(attributePaths = { "roles" }, type = EntityGraphType.LOAD)
     Optional<ClubMember> findByEmailAndFromSocial(String email, boolean fromSocial);
 }
