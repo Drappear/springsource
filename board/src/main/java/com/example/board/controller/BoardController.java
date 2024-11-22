@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -45,6 +45,8 @@ public class BoardController {
         model.addAttribute("dto", dto);
     }
 
+    // 로그인 사용자 == 작성자
+    @PreAuthorize("authentication.name == #dto.writerEmail")
     @PostMapping("/modify")
     public String postModify(BoardDTO dto, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
             RedirectAttributes rttr) {
@@ -60,8 +62,9 @@ public class BoardController {
         return "redirect:read";
     }
 
+    @PreAuthorize("authentication.name == #writerEmail")
     @PostMapping("/remove")
-    public String postRemove(Long bno, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+    public String postRemove(Long bno, String writerEmail, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
             RedirectAttributes rttr) {
         log.info("post remove 요청 {}", bno);
         boardService.remove(bno);
@@ -74,12 +77,14 @@ public class BoardController {
         return "redirect:list";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public void getCreate(@ModelAttribute("dto") BoardDTO dto,
             @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
         log.info("get create 등록 폼 요청");
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String postCreate(@Valid @ModelAttribute("dto") BoardDTO dto, BindingResult result,
             @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,

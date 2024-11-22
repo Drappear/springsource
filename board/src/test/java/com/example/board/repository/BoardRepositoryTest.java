@@ -39,7 +39,7 @@ public class BoardRepositoryTest {
         // 30명
         IntStream.rangeClosed(1, 30).forEach(i -> {
             Member member = Member.builder()
-                    .email("email" + i + "@email.com")
+                    .email("member" + i + "@email.com")
                     .password(passwordEncoder.encode("1111"))
                     .name("member" + i)
                     .role(MemberRole.MEMBER)
@@ -53,7 +53,7 @@ public class BoardRepositoryTest {
         // 100개
         IntStream.rangeClosed(1, 100).forEach(i -> {
             int num = (int) (Math.random() * 30) + 1;
-            Member member = memberRepository.findById("email" + num + "@email.com").get();
+            Member member = memberRepository.findById("member" + num + "@email.com").get();
             Board board = Board.builder()
                     .title("board title.." + i)
                     .content("board content..." + i)
@@ -69,11 +69,14 @@ public class BoardRepositoryTest {
         // 100개
         IntStream.rangeClosed(1, 100).forEach(i -> {
             int num = (int) (Math.random() * 100) + 1;
+            int num2 = (int) (Math.random() * 30) + 1;
 
             Board bnum = boardRepository.findById((long) num).get();
 
+            Member member = memberRepository.findById("member" + num2 + "@email.com").get();
+
             Reply reply = Reply.builder()
-                    .replyer("replyer" + num)
+                    .replyer(member)
                     .text("reply text..." + num)
                     .board(bnum)
                     .build();

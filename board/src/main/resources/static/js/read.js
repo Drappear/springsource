@@ -33,12 +33,12 @@ const replyLoaded = () => {
 
       let result = "";
       data.forEach((reply) => {
-        result += `<div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="${reply.rno}">`;
+        result += `<div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="${reply.rno}" data-email="${reply.replyerEmail}">`;
         result += ` <div class="p-3">`;
         result += `   <img src="/img/default.png" class="rounded-circle mx-auto d-block" style="width: 60px; height: 60px" />`;
         result += ` </div>`;
         result += ` <div class="flex-grow-1 align-self-center">`;
-        result += `   <span>${reply.replyer}</span>`;
+        result += `   <span>${reply.replyerName}</span>`;
         result += `   <div>`;
         result += `     <span class="fs-5">${reply.text}</span>`;
         result += `   </div>`;
@@ -49,12 +49,15 @@ const replyLoaded = () => {
         result += `   </div>`;
         result += ` </div>`;
         result += ` <div class="d-flex flex-column align-self-center">`;
-        result += `   <div class="mb-2">`;
-        result += `     <button class="btn btn-outline-danger btn-sm">삭제</button>`;
-        result += `   </div>`;
-        result += `   <div>`;
-        result += `     <button class="btn btn-outline-success btn-sm">수정</button>`;
-        result += `   </div>`;
+
+        if (`${loginEmail}` == `${reply.replyerEmail}`) {
+          result += `   <div class="mb-2">`;
+          result += `     <button class="btn btn-outline-danger btn-sm">삭제</button>`;
+          result += `   </div>`;
+          result += `   <div>`;
+          result += `     <button class="btn btn-outline-success btn-sm">수정</button>`;
+          result += `   </div>`;
+        }
         result += ` </div>`;
         result += `</div>`;
       });
@@ -73,14 +76,14 @@ replyForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   // reply form 안에 있는 replyer, text value 변수에 담기
-  const replyer = replyForm.querySelector("#replyer");
+  const replyerEmail = replyForm.querySelector("#replyerEmail");
   const text = replyForm.querySelector("#text");
 
   const rno = replyForm.querySelector("#rno");
 
   const reply = {
     text: text.value,
-    replyer: replyer.value,
+    replyerEmail: replyerEmail.value,
     bno: bno,
     rno: rno.value,
   };
@@ -91,6 +94,7 @@ replyForm.addEventListener("submit", (e) => {
     fetch(`/replies/new`, {
       headers: {
         "content-type": "application/json",
+        "X-CSRF-TOKEN": csrfValue,
       },
       body: JSON.stringify(reply),
       method: "post",
@@ -105,7 +109,6 @@ replyForm.addEventListener("submit", (e) => {
         console.log(data);
         if (data) {
           // 댓글 폼의 내용 제거
-          replyer.value = "";
           text.value = "";
 
           // 댓글 등록 알람
@@ -119,6 +122,7 @@ replyForm.addEventListener("submit", (e) => {
     fetch(`/replies/${rno.value}`, {
       headers: {
         "content-type": "application/json",
+        "X-CSRF-TOKEN": csrfValue,
       },
       body: JSON.stringify(reply),
       method: "put",
@@ -133,7 +137,6 @@ replyForm.addEventListener("submit", (e) => {
         console.log(data);
         if (data) {
           // 댓글 폼의 내용 제거
-          replyer.value = "";
           text.value = "";
           rno.value = "";
 
@@ -163,6 +166,11 @@ replyList.addEventListener("click", (e) => {
   if (btn.classList.contains("btn-outline-danger")) {
     // 댓글 삭제
     fetch(`/replies/${rno}`, {
+      headers: {
+        "content-type": "application/json",
+        "X-CSRF-TOKEN": csrfValue,
+      },
+      body: JSON.stringify({ replyerEmail: replyerEmail }),
       method: "delete",
     })
       .then((response) => response.text())
@@ -181,7 +189,8 @@ replyList.addEventListener("click", (e) => {
 
         // 해당 댓글 replyForm안에 출력
         replyForm.querySelector("#rno").value = data.rno;
-        replyForm.querySelector("#replyer").value = data.replyer;
+        replyForm.querySelector("#replyerEmail").value = data.replyerEmail;
+        replyForm.querySelector("#replyerName").value = data.replyerName;
         replyForm.querySelector("#text").value = data.text;
       });
   }
