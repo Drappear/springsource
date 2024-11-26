@@ -1,8 +1,10 @@
 package com.example.movie.repository.total;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -50,7 +52,6 @@ public class MovieImageReviewRepositoryImpl extends QuerydslRepositorySupport im
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(movie.mno.gt(0L));
 
-
         // sort
         Sort sort = pageable.getSort();
         sort.stream().forEach(order -> {
@@ -66,13 +67,30 @@ public class MovieImageReviewRepositoryImpl extends QuerydslRepositorySupport im
         tuple.limit(pageable.getPageSize());
 
         List<Tuple> result = tuple.fetch();
-        long count = 
+        long count = tuple.fetchCount();
 
-        return null;
+        return new PageImpl<>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
     }
 
     @Override
-    public List<Object[]> getMovieRwo(Long mno) {
-        return null;
+    public List<Object[]> getMovieRow(Long mno) {
+        QMovieImage movieImage = QMovieImage.movieImage;
+        QReview review = QReview.review;
+        QMovie movie = QMovie.movie;
+
+        JPQLQuery<MovieImage> query = from(movieImage).leftJoin(movie).on(movie.eq(movieImage.movie));
+
+        JPQLQuery<Long> rCnt = JPAExpressions.select(review.countDistinct()).from(review)
+                .where(review.movie.eq(movieImage.movie));
+        JPQLQuery<Double> rAvg = JPAExpressions.select(review.grade.avg().round()).from(review)
+                .where(review.movie.eq(movieImage.movie));
+
+        JPQLQuery<Tuple> tuple = query.select(movie, movieImage, rCnt, rAvg)
+                .where(movieImage.movie.mno.eq(mno))
+                .orderBy(movieImage.inum.desc());
+
+        List<Tuple> result = tuple.fetch();
+
+        return result.stream().map(t -> t.toArray()).collect(Collectors.toList());
     }
 }

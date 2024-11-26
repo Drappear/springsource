@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{/layouts/layout}">
   <div class="container px-6 mx-auto grid" layout:fragment="content">
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h2>
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Movie LIST</h2>
     <!-- CTA -->
     <a
       class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
@@ -52,7 +52,12 @@
                     ></div>
                   </div>
                   <div>
-                    <p class="font-semibold" th:text="${movie.title}"></p>
+                    <p class="font-semibold">
+                      <a
+                        th:href="@{read(mno=${movie.mno}, page=${requestDto.page}, size=${requestDto.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
+                        th:text="${movie.title}"
+                      ></a>
+                    </p>
                   </div>
                 </div>
               </td>
@@ -81,9 +86,10 @@
         <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
           <nav aria-label="Table navigation">
             <ul class="inline-flex items-center">
-              <li>
-                <button
+              <li th:if="${result.prev}">
+                <a
                   class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                  th:href="@{list(page=${result.start-1}, size=${result.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
                   aria-label="Previous"
                 >
                   <svg aria-hidden="true" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
@@ -93,46 +99,21 @@
                       fill-rule="evenodd"
                     ></path>
                   </svg>
-                </button>
+                </a>
               </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                  1
-                </button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                  2
-                </button>
-              </li>
-              <li>
-                <button
-                  class="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple"
+              <li th:each="page : ${result.pageList}">
+                <a
+                  class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                  th:href="@{list(page=${page}, size=${result.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
+                  th:text="${page}"
                 >
-                  3
-                </button>
+                </a>
               </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                  4
-                </button>
-              </li>
-              <li>
-                <span class="px-3 py-1">...</span>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                  8
-                </button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                  9
-                </button>
-              </li>
-              <li>
-                <button
+
+              <li th:if="${result.next}">
+                <a
                   class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                  th:href="@{list(page=${result.end+1}, size=${result.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
                   aria-label="Next"
                 >
                   <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
@@ -142,7 +123,7 @@
                       fill-rule="evenodd"
                     ></path>
                   </svg>
-                </button>
+                </a>
               </li>
             </ul>
           </nav>

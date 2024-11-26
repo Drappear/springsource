@@ -1,5 +1,7 @@
 package com.example.movie.repository.total;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,4 +11,5 @@ public interface MovieImageReviewRepository {
     Page<Object[]> getTotalList(String type, String keyword, Pageable pageable);
 
     // 특정 영화 정보 조회
+    List<Object[]> getMovieRow(Long mno);
 }

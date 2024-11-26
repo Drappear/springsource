@@ -1,6 +1,7 @@
 package com.example.movie.repository;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class MovieImageRepositoryTest {
             MovieImage movieImage = (MovieImage) objects[1];
             Long count = (Long) objects[2];
             Double avg = (Double) objects[3];
+        }
+    }
+
+    @Test
+    public void rowTest() {
+        List<Object[]> result = movieImageRepository.getMovieRow(40L);
+        for (Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
         }
     }
 }

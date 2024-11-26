@@ -7,12 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.movie.dto.MovieDTO;
 import com.example.movie.dto.PageRequestDTO;
 import com.example.movie.dto.PageResultDTO;
 import com.example.movie.service.MovieService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @RequestMapping("/movie")
@@ -23,12 +27,35 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("/list")
-    public void getMovieList(PageRequestDTO pageRequestDTO, Model model) {
+    public void getMovieList(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, Model model) {
         log.info("get 전체 영화 리스트 요청");
 
         PageResultDTO<MovieDTO, Object[]> result = movieService.getList(pageRequestDTO);
 
         model.addAttribute("result", result);
+    }
+
+    @GetMapping({ "/read", "/modify" })
+    public void getRead(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, @RequestParam Long mno,
+            Model model) {
+        log.info("get 영화 상세정보 요청 {}", mno);
+        MovieDTO movieDTO = movieService.getMovieDetail(mno);
+        model.addAttribute("movieDto", movieDTO);
+    }
+
+    @PostMapping("/remove")
+    public String postRemove(@RequestParam Long mno, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            RedirectAttributes rttr) {
+        log.info("영화 삭제 요청 {}", mno);
+
+        movieService.delete(mno);
+
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        return "redirect:/movie/list";
     }
 
 }

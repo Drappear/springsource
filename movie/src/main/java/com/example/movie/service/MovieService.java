@@ -33,7 +33,7 @@ public interface MovieService {
         MovieDTO dto = MovieDTO.builder()
                 .mno(movie.getMno())
                 .title(movie.getTitle())
-                .reviewAvg(reviewAvg)
+                .reviewAvg(reviewAvg != null ? reviewAvg : 0.0d)
                 .reviewCnt(reviewCnt)
                 .regDate(movie.getRegDate())
                 .build();
