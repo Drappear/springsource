@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.movie.entity.Movie;
-import com.example.movie.entity.Review;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
