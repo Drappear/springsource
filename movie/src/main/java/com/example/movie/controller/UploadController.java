@@ -51,7 +51,7 @@ public class UploadController {
     @PostMapping("/upload")
     public ResponseEntity<List<UploadResultDTO>> postFileUpload(MultipartFile[] uploadFiles) {
 
-        List<UploadResultDTO> uploadResultDtos = new ArrayList<>();
+        List<UploadResultDTO> uploadResultDTOs = new ArrayList<>();
 
         for (MultipartFile multipartFile : uploadFiles) {
             log.info("original file name : {}", multipartFile.getOriginalFilename());
@@ -92,10 +92,10 @@ public class UploadController {
             }
 
             // 저장된 파일 정보 추가
-            uploadResultDtos.add(new UploadResultDTO(uuid, originName, saveFolderPath));
+            uploadResultDTOs.add(new UploadResultDTO(uuid, originName, saveFolderPath));
         }
 
-        return new ResponseEntity<>(uploadResultDtos, HttpStatus.OK);
+        return new ResponseEntity<List<UploadResultDTO>>(uploadResultDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/display")
