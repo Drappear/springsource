@@ -7,12 +7,14 @@ const reviewLoaded = () => {
     });
 };
 
+reviewLoaded();
+
 // 이미지 모달 요소 가져오기
 const imgModal = document.querySelector("#imgModal");
 
 if (imgModal) {
   imgModal.addEventListener("show.bs.modal", (e) => {
-    // 모달 뜨게 만든 li요소 가져오기
+    // 모달 뜨게 만든 img요소 가져오기
     const posterImg = e.relatedTarget;
 
     // data 가져오기
@@ -23,6 +25,7 @@ if (imgModal) {
 
     imgModal.querySelector(
       ".modal-body"
-    ).innerHTML = `<img src="/upload/display?fileName=${file}&size=1" alt="" style="width:100%" >`;
+    ).innerHTML = `<img src="/upload/display?fileName=${file}&size=1" alt="" style="width:100%">`;
+    e.stopImmediatePropagation();
   });
 }
