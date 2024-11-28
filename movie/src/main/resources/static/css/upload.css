@@ -16,8 +16,10 @@
   list-style: none;
   padding: 10px;
   margin-left: 2em;
+  cursor: pointer;
 }
 
 .uploadResult ul li img {
   width: 100px;
+  cursor: pointer;
 }
