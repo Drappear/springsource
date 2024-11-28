@@ -80,7 +80,7 @@ public class MovieController {
     }
 
     @GetMapping("/create")
-    public void getCreate(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
+    public void getCreate(MovieDTO movieDTO, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
         log.info("get 영화 작성 폼 요청");
     }
 
