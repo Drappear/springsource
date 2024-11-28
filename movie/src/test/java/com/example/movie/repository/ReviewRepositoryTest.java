@@ -1,5 +1,6 @@
 package com.example.movie.repository;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.movie.entity.Member;
+import com.example.movie.entity.Movie;
 import com.example.movie.entity.Review;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootTest
 public class ReviewRepositoryTest {
@@ -35,6 +39,19 @@ public class ReviewRepositoryTest {
                     .build();
 
             reviewRepository.save(review);
+        });
+    }
+
+    @Transactional
+    @Test
+    public void getTest() {
+        Movie movie = movieRepository.findById(21L).get();
+        List<Review> list = reviewRepository.finByMovie(movie);
+        // System.out.println(list);
+        list.forEach(review -> {
+            System.out.println(review.getText());
+            System.out.println(review.getGrade());
+            System.out.println(review.getMember().getNickName());
         });
     }
 }

@@ -2,6 +2,7 @@ package com.example.movie.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import com.example.movie.dto.MovieDTO;
 import com.example.movie.dto.PageRequestDTO;
 import com.example.movie.dto.PageResultDTO;
 import com.example.movie.service.MovieService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -40,7 +44,24 @@ public class MovieController {
             Model model) {
         log.info("get 영화 상세정보 요청 {}", mno);
         MovieDTO movieDTO = movieService.getMovieDetail(mno);
-        model.addAttribute("movieDto", movieDTO);
+        model.addAttribute("movieDTO", movieDTO);
+    }
+
+    @PostMapping("/modify")
+    public String postModify(MovieDTO movieDTO, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            RedirectAttributes rttr) {
+        log.info("영화 정보 수정 {}", movieDTO);
+
+        // 서비스
+        Long mno = movieService.modify(movieDTO);
+
+        rttr.addAttribute("mno", mno);
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        return "redirect:/movie/read";
     }
 
     @PostMapping("/remove")
@@ -64,14 +85,23 @@ public class MovieController {
     }
 
     @PostMapping("/create")
-    public String postCreate(MovieDTO movieDTO, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+    public String postCreate(@Valid MovieDTO movieDTO, BindingResult result,
+            @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
             RedirectAttributes rttr) {
         log.info("영화 등록 {}", movieDTO);
+
+        if (result.hasErrors()) {
+            return "/movie/create";
+        }
 
         // 서비스
         Long mno = movieService.register(movieDTO);
 
         rttr.addAttribute("mno", mno);
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
 
         return "redirect:/movie/read";
     }
