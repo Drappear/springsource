@@ -1,3 +1,4 @@
+// [type=file] change event 처리
 const fileInput = document.querySelector("[type='file']");
 
 function showUploadImages(files) {
@@ -8,6 +9,7 @@ function showUploadImages(files) {
 
   files.forEach((file) => {
     tags += `<li data-name="${file.fileName}" data-path="${file.folderPath}" data-uuid="${file.uuid}">`;
+    tags += `  <div>`;
     tags += `   <a href="">`;
     tags += `       <img src= "/upload/display?fileName=${file.thumbImageURL}" class="block"`;
     tags += `   </a>`;
@@ -15,6 +17,7 @@ function showUploadImages(files) {
     tags += `   <a href="${file.imageURL}" data-file="">`;
     tags += `       <i class="fa-solid fa-xmark"></i>`;
     tags += `   </a>`;
+    tags += `  </div>`;
     tags += `</li>`;
   });
   output.insertAdjacentHTML("beforeend", tags);
@@ -52,10 +55,10 @@ document.querySelector("#createForm").addEventListener("submit", (e) => {
   // 요소.dataset.name
   let result = "";
   attachInfos.forEach((obj, idx) => {
-    console.log(idx);
-    console.log(obj.dataset.name);
-    console.log(obj.dataset.path);
-    console.log(obj.dataset.uuid);
+   // console.log(idx);
+   // console.log(obj.dataset.name);
+   // console.log(obj.dataset.path);
+   // console.log(obj.dataset.uuid);
     result += `<input type="hidden" name="movieImageDTOs[${idx}].path" value="${obj.dataset.path}" />`;
     result += `<input type="hidden" name="movieImageDTOs[${idx}].uuid" value="${obj.dataset.uuid}" />`;
     result += `<input type="hidden" name="movieImageDTOs[${idx}].imgName" value="${obj.dataset.name}" />`;
