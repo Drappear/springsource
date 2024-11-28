@@ -33,7 +33,7 @@ public interface MovieService {
 
     default MovieDTO entityToDto(Movie movie, List<MovieImage> movieImages, Long reviewCnt, Double reviewAvg) {
 
-        MovieDTO dto = MovieDTO.builder()
+        MovieDTO movieDTO = MovieDTO.builder()
                 .mno(movie.getMno())
                 .title(movie.getTitle())
                 .reviewAvg(reviewAvg != null ? reviewAvg : 0.0d)
@@ -50,9 +50,9 @@ public interface MovieService {
                     .build();
         }).collect(Collectors.toList());
 
-        dto.setMovieImageDTOs(movieImageDTOs);
+        movieDTO.setMovieImageDTOs(movieImageDTOs);
 
-        return dto;
+        return movieDTO;
     }
 
     default Map<String, Object> dtoToEntity(MovieDTO movieDTO) {
