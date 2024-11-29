@@ -21,7 +21,7 @@ public interface ReviewService {
 
     void removeReview(Long reviewNo);
 
-    default ReviewDTO entityDto(Review review) {
+    default ReviewDTO entityToDto(Review review) {
         ReviewDTO reviewDTO = ReviewDTO.builder()
                 .reviewNo(review.getReviewNo())
                 .grade(review.getGrade())

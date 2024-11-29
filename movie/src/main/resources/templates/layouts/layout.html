@@ -35,7 +35,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <!-- 개별 페이지 CSS -->
+    <!-- 페이지 별 css 영역 -->
     <th:block layout:fragment="css"></th:block>
   </head>
   <body>
@@ -45,6 +45,7 @@
     >
       <!-- Desktop sidebar -->
       <div th:replace="~{/fragments/sidebar::sidebar}"></div>
+
       <div class="flex flex-col flex-1 w-full">
         <!-- header -->
         <div th:replace="~{/fragments/header::header}"></div>
@@ -54,20 +55,19 @@
         </main>
       </div>
     </div>
-    <!-- 검색 이용 폼 -->
+    <!-- 검색 시 이동할 폼-->
     <form th:action="@{/movie/list}" method="get" id="searchForm">
       <input type="hidden" name="page" th:value="${requestDto.page}" />
       <input type="hidden" name="size" th:value="${requestDto.size}" />
-      <input type="hidden" name="type" th:value="$t" />
+      <input type="hidden" name="type" th:value="t" />
       <input type="hidden" name="keyword" th:value="${requestDto.keyword}" />
     </form>
-    <!-- 모달 -->
-    <!-- data-bs-toggle="modal" data-bs-target="#imgModal" -->
+    <!-- 모달창 -->
     <div
       class="modal fade"
       id="imgModal"
       tabindex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="imgModal"
       aria-hidden="true"
     >
       <div class="modal-dialog">
@@ -96,7 +96,7 @@
       crossorigin="anonymous"
     ></script>
     <script th:src="@{/js/search.js}"></script>
-    <!-- 개별 페이지 JS -->
+    <!-- 페이지 별 js 영역 -->
     <th:block layout:fragment="js"></th:block>
   </body>
 </html>

@@ -46,7 +46,7 @@ public class ReviewRepositoryTest {
     @Test
     public void getTest() {
         Movie movie = movieRepository.findById(21L).get();
-        List<Review> list = reviewRepository.finByMovie(movie);
+        List<Review> list = reviewRepository.findByMovie(movie);
         // System.out.println(list);
         list.forEach(review -> {
             System.out.println(review.getText());
