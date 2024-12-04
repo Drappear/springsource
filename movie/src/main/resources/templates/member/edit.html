@@ -30,7 +30,7 @@
                 Profile 수정
               </h1>
 
-              <form action="" method="post">
+              <form th:action="@{/member/edit/password}" method="post">
                 <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Password</span>
                 <input
@@ -53,7 +53,7 @@
                 >
                 비밀번호 수정
               </button>
-              <span th:if="${error}" th:text="${error}"></span>
+              <span th:if="${error}" th:text="${error}" class="text-danger samll"></span>
               </form>
               
               <form th:action="@{/member/edit/nickname}" method="post" class="mt-4">

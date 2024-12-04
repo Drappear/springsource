@@ -33,6 +33,9 @@ fileInput.addEventListener("change", (e) => {
 
   fetch("/upload/upload", {
     method: "post",
+    headers: {
+      "X-CSRF-TOKEN": csrfValue,
+    },
     body: formData,
   })
     .then((response) => response.json())
@@ -55,10 +58,10 @@ document.querySelector("#createForm").addEventListener("submit", (e) => {
   // 요소.dataset.name
   let result = "";
   attachInfos.forEach((obj, idx) => {
-   // console.log(idx);
-   // console.log(obj.dataset.name);
-   // console.log(obj.dataset.path);
-   // console.log(obj.dataset.uuid);
+    // console.log(idx);
+    // console.log(obj.dataset.name);
+    // console.log(obj.dataset.path);
+    // console.log(obj.dataset.uuid);
     result += `<input type="hidden" name="movieImageDTOs[${idx}].path" value="${obj.dataset.path}" />`;
     result += `<input type="hidden" name="movieImageDTOs[${idx}].uuid" value="${obj.dataset.uuid}" />`;
     result += `<input type="hidden" name="movieImageDTOs[${idx}].imgName" value="${obj.dataset.name}" />`;

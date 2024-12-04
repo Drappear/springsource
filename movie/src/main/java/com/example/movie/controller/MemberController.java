@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,9 +22,11 @@ import com.example.movie.dto.PasswordDTO;
 import com.example.movie.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -87,6 +90,54 @@ public class MemberController {
         // 성공 시 세션 해제 후 /login
         session.invalidate();
         return "redirect:/member/login";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/leave")
+    public void getLeave(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
+        log.info("회원 탈퇴 폼 요청");
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/leave")
+    public String postLeave(PasswordDTO passwordDTO, boolean check, HttpSession session, RedirectAttributes rttr) {
+        log.info("회원 탈퇴 요청 {},{}", passwordDTO, check);
+
+        if (!check) {
+            rttr.addFlashAttribute("error", "항목을 체크해주세요");
+            return "/member/leave";
+        }
+
+        try {
+            memberService.leave(passwordDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            rttr.addFlashAttribute("error", e.getMessage());
+            return "redirect:/member/leave";
+        }
+
+        session.invalidate();
+        return "redirect:/movie/list";
+    }
+
+    // 회원가입
+    @GetMapping("/register")
+    public void getRegister(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, MemberDTO memberDTO) {
+        log.info("회원가입 폼 요청");
+    }
+
+    @PostMapping("/register")
+    public String postRegister(@Valid MemberDTO memberDTO, BindingResult result, boolean check,
+            @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
+
+        if (result.hasErrors()) {
+            return "member/register";
+        }
+
+        memberService.register(memberDTO);
+
+        return "redirect:/member/login";
+
     }
 
     // 개발자용 - Authentication 확인용

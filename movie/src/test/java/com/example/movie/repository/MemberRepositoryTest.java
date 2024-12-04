@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.movie.entity.Member;
@@ -16,6 +17,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -47,5 +51,13 @@ public class MemberRepositoryTest {
 
         memberRepository.updateNickname("testNick", "member1@email.com");
 
+    }
+
+    @Commit
+    @Transactional
+    @Test
+    public void deleteTest() {
+        reviewRepository.deleteByMember(Member.builder().mid(23L).build());
+        memberRepository.deleteById(23L);
     }
 }

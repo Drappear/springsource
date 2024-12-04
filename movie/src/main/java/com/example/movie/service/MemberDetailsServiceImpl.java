@@ -14,6 +14,7 @@ import com.example.movie.dto.MemberDTO;
 import com.example.movie.dto.PasswordDTO;
 import com.example.movie.entity.Member;
 import com.example.movie.repository.MemberRepository;
+import com.example.movie.repository.ReviewRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ import lombok.extern.log4j.Log4j2;
 public class MemberDetailsServiceImpl implements UserDetailsService, MemberService {
 
     private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -79,6 +81,28 @@ public class MemberDetailsServiceImpl implements UserDetailsService, MemberServi
             throw new Exception("비밀번호를 확인해주세요");
         }
 
+    }
+
+    @Override
+    public String register(MemberDTO memberDTO) {
+
+        Member member = dtoToEntity(memberDTO);
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+
+        return memberRepository.save(member).getNickName();
+    }
+
+    @Transactional
+    @Override
+    public void leave(PasswordDTO passwordDTO) throws Exception {
+        Member member = memberRepository.findByEmail(passwordDTO.getEmail()).get();
+
+        if (!passwordEncoder.matches(passwordDTO.getCurrentPassword(), member.getPassword())) {
+            throw new Exception("입력한 비밀번호를 확인해주세요");
+        }
+
+        reviewRepository.deleteByMember(member);
+        memberRepository.deleteById(member.getMid());
     }
 
 }

@@ -3,12 +3,12 @@ document.querySelector(".uploadResult").addEventListener("click", (e) => {
   // a태그 기능 중지
   e.preventDefault();
   // x 눌러진 태그 요소 찾기
- // console.log(e.target);
- // console.log(e.currentTarget);
+  // console.log(e.target);
+  // console.log(e.currentTarget);
   // href 값 가져오기
   const element = e.target.closest("a");
- // console.log(element);
- // console.log(element.getAttribute("href"));
+  // console.log(element);
+  // console.log(element.getAttribute("href"));
 
   // 이미지 삭제
   const removeLi = e.target.closest("li");
@@ -21,6 +21,9 @@ document.querySelector(".uploadResult").addEventListener("click", (e) => {
 
   fetch("/upload/remove", {
     method: "post",
+    headers: {
+      "X-CSRF-TOKEN": csrfValue,
+    },
     body: formData,
   })
     .then((response) => {
