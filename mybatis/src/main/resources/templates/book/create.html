@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <th:block layout:fragment="css">
+    <style>
+      /* css */
+    </style>
+  </th:block>
+
+  <div layout:fragment="content" class="container">
+    <h1>도서 등록</h1>
+    <form action="" method="post" th:object="${dto}">
+      <div class="mb-3 row">
+        <label for="categoryName" class="col-sm-2 col-form-label">분류</label>
+        <div class="col-sm-10">
+          <select name="categoryName" id="categoryName" class="form-select">
+            <option value="" th:selected="${dto.categoryName}">
+              분류 선택
+            </option>
+            <option
+              th:each="cat : ${cats}"
+              th:value="${cat.id}"
+              th:text="${cat.categoryName}"
+              th:selected="${dto.categoryName} == ${cat.categoryName}"
+            ></option>
+          </select>
+          <div
+            th:if="${#fields.hasErrors('categoryName')}"
+            th:errors="*{categoryName}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="publisherName" class="col-sm-2 col-form-label"
+          >출판사</label
+        >
+        <div class="col-sm-10">
+          <select name="publisherName" id="publisherName" class="form-select">
+            <option value="" th:selected="${dto.publisherName}">
+              출판사 선택
+            </option>
+            <option
+              th:each="pub : ${pubs}"
+              th:value="${pub.id}"
+              th:text="${pub.publisherName}"
+              th:selected="${dto.publisherName} == ${pub.publisherName}"
+            ></option>
+          </select>
+          <div
+            th:if="${#fields.hasErrors('publisherName')}"
+            th:errors="*{publisherName}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="title" class="col-sm-2 col-form-label">제목</label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="title"
+            id="title"
+            th:value="${dto.title}"
+          />
+          <div
+            th:if="${#fields.hasErrors('title')}"
+            th:errors="*{title}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="writer" class="col-sm-2 col-form-label">저자</label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="writer"
+            id="writer"
+            th:value="${dto.writer}"
+          />
+          <div
+            th:if="${#fields.hasErrors('writer')}"
+            th:errors="*{writer}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="price" class="col-sm-2 col-form-label">가격</label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="price"
+            id="price"
+            th:value="${dto.price}"
+          />
+          <div
+            th:if="${#fields.hasErrors('price')}"
+            th:errors="*{price}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <label for="salePrice" class="col-sm-2 col-form-label">판매가</label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="salePrice"
+            id="salePrice"
+            th:value="${dto.salePrice}"
+          />
+          <div
+            th:if="${#fields.hasErrors('salePrice')}"
+            th:errors="*{salePrice}"
+            class="text-danger"
+          ></div>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary">추가</button>
+        <a th:href="@{list}" class="btn btn-secondary">목록</a>
+      </div>
+    </form>
+  </div>
+
+  <th:block layout:fragment="script">
+    <script>
+      // script
+    </script>
+    <script th:src="@{/js/modify.js}"></script>
+  </th:block>
+</html>
