@@ -6,14 +6,43 @@
 
 <mapper namespace="com.example.mybatis.mapper.BookMapper">
 
+  <select id="categories" resultType="com.example.mybatis.dto.CategoryDTO">
+    SELECT c.CATEGORY_ID AS id, c.CATEGORY_NAME  
+    FROM BOOK_CATEGORY c 
+  </select>
+  <select id="publishers" resultType="com.example.mybatis.dto.PublisherDTO">
+    SELECT  p.PUBLISHER_ID AS id, p.PUBLISHER_NAME
+    FROM BOOK_PUBLISHER p
+  </select>
+
+  <insert id="create">
+    INSERT INTO BOOKTBL(BOOK_ID, TITLE, WRITER, PRICE, SALE_PRICE, CREATED_DATE_TIME, LAST_MODIFIED_DATE_TIME, CATEGORY_CATEGORY_ID, PUBLISHER_PUBLISHER_ID)
+    VALUES(book_seq.nextval, #{title}, #{writer}, #{price}, #{salePrice}, current_timestamp, current_timestamp, #{categoryName}, #{publisherName})
+  </insert>
+
+  <update id = "update">
+    UPDATE BOOKTBL
+    SET PRICE = #{price}, SALE_PRICE = #{salePrice}, LAST_MODIFIED_DATE_TIME = current_timestamp
+    WHERE BOOK_ID = #{id}
+  </update>
+
+  <delete id = "delete">
+    DELETE FROM BOOKTBL    
+    WHERE BOOK_ID = #{id}
+  </delete>
+
   <select id="selectBook" resultType="com.example.mybatis.dto.BookDTO">
-    select * from booktbl b where b.book_id = #{id}
+    SELECT  b.BOOK_ID AS id, b.TITLE, b.WRITER, b.SALE_PRICE, b.PRICE, b.CREATED_DATE_TIME, p.PUBLISHER_ID, p.PUBLISHER_NAME, c.CATEGORY_ID, c.CATEGORY_NAME  
+    FROM BOOKTBL b 
+    JOIN BOOK_PUBLISHER p ON b.PUBLISHER_PUBLISHER_ID = p.PUBLISHER_ID
+    JOIN BOOK_CATEGORY c ON b.CATEGORY_CATEGORY_ID = c.CATEGORY_ID
+    WHERE b.BOOK_ID = #{id}
   </select>
 
   <select id="selectBookList" resultType="com.example.mybatis.dto.BookDTO">
     
     <![CDATA[
-        SELECT t.book_id, t.title, t.writer, t.publisher_id, t.publisher_name, t.category_id, t.category_name 
+        SELECT t.BOOK_ID AS id, t.TITLE, t.WRITER, t.PUBLISHER_ID, t.PUBLISHER_NAME, t.CATEGORY_ID, t.CATEGORY_NAME 
         FROM (SELECT rownum rn, b1.*
                 FROM (SELECT *
                       FROM BOOKTBL b
@@ -33,7 +62,9 @@
 
   <select id="totalCnt" resultType="int">
     SELECT count(*) 
-    FROM booktbl 
+    FROM BOOKTBL b
+    JOIN BOOK_PUBLISHER p ON b.PUBLISHER_PUBLISHER_ID = p.PUBLISHER_ID
+    JOIN BOOK_CATEGORY c ON b.CATEGORY_CATEGORY_ID = c.CATEGORY_ID
     WHERE 
         <include refid="criteria"></include> 
         book_id > 0
@@ -49,9 +80,9 @@
                 <when test="type == 'c'.toString()">
                     CATEGORY_NAME like '%'||#{keyword}||'%'
                 </when>
-                <otherwise>
+                <when test="type == 'w'.toString()">
                     writer like '%'||#{keyword}||'%'
-                </otherwise>
+                </when>
             </choose>
         </trim>
     </trim>

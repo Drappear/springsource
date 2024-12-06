@@ -10,7 +10,7 @@ import com.example.mybatis.dto.PublisherDTO;
 public interface BookService {
 
     // CRUD
-    Long create(BookDTO dto);
+    boolean create(BookDTO dto);
 
     BookDTO getRow(Long id);
 
@@ -18,9 +18,9 @@ public interface BookService {
 
     int totalCnt(PageRequestDTO pageRequestDTO);
 
-    Long update(BookDTO dto);
+    boolean update(BookDTO dto);
 
-    void delete(Long id);
+    boolean delete(Long id);
 
     List<CategoryDTO> getCategoryList();
 

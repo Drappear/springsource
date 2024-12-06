@@ -36,9 +36,15 @@ public class BookController {
     // 목록
     @GetMapping("/list")
     public void getList(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, Model model) {
-        log.info("list page request");
-        log.info("requestDto {} ", pageRequestDTO);
-        bookService.getList(pageRequestDTO);
+        log.info("도서 전체 목록 요청 {}", pageRequestDTO);
+
+        List<BookDTO> result = bookService.getList(pageRequestDTO);
+        int total = bookService.totalCnt(pageRequestDTO);
+
+        log.info("list {}", result);
+        log.info("total {}", total);
+
+        model.addAttribute("result", new PageResultDTO<>(pageRequestDTO, total, result));
     }
 
     // 상세조회
@@ -62,16 +68,19 @@ public class BookController {
         log.info("post modify {} book request", dto);
         log.info("requestDto {} ", pageRequestDTO);
 
-        Long id = bookService.update(dto);
+        if (bookService.update(dto)) {
 
-        // 상세조회로 이동
-        rttr.addAttribute("id", id);
-        rttr.addAttribute("page", pageRequestDTO.getPage());
-        rttr.addAttribute("size", pageRequestDTO.getSize());
-        rttr.addAttribute("type", pageRequestDTO.getType());
-        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+            // 상세조회로 이동
+            rttr.addAttribute("id", dto.getId());
+            rttr.addAttribute("page", pageRequestDTO.getPage());
+            rttr.addAttribute("size", pageRequestDTO.getSize());
+            rttr.addAttribute("type", pageRequestDTO.getType());
+            rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
 
-        return "redirect:read";
+            return "redirect:read";
+        } else {
+            return "/book/modify";
+        }
     }
 
     // 삭제
@@ -118,10 +127,13 @@ public class BookController {
             return "/book/create";
         }
 
-        Long id = bookService.create(dto);
-        // rttr.addAttribute("id", id);
-        // return "redirect:read";
-        rttr.addFlashAttribute("msg", id + " 번 도서가 등록되었습니다.");
+        bookService.create(dto);
+
+        rttr.addFlashAttribute("msg", "도서가 등록되었습니다.");
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
         return "redirect:list";
     }
 

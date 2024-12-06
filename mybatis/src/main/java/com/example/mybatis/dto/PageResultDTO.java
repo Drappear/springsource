@@ -1,14 +1,16 @@
 package com.example.mybatis.dto;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import lombok.Data;
 
 @Data
-public class PageResultDTO<DTO, EN> {
+public class PageResultDTO<DTO> {
+
+    // 화면에 보여줄 DTO리스트
+    private List<DTO> dtoList;
 
     // 총 개수
     private int total;
@@ -26,8 +28,9 @@ public class PageResultDTO<DTO, EN> {
     // 화면에 보여줄 페이지 번호 목록
     private List<Integer> pageList;
 
-    public PageResultDTO(PageRequestDTO requestDTO, int total) {
+    public PageResultDTO(PageRequestDTO requestDTO, int total, List<DTO> dtoList) {
         this.total = total;
+        this.dtoList = dtoList;
 
         int tempEnd = (int) (Math.ceil(requestDTO.getPage() / 10.0)) * requestDTO.getSize();
         totalPage = (int) (Math.ceil((total / 1.0) / requestDTO.getSize()));
